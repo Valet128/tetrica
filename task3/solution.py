@@ -1,8 +1,25 @@
 def appearance(intervals: dict[str, list[int]]) -> int:
+    if not isinstance(intervals, dict):
+        raise TypeError("Тип данных не соответствует словарю")
+
+    for k, v in intervals.items():
+        if not isinstance(v, list):
+            raise TypeError("Тип вложенных данных не соответствует списку")
+
+    for k,v in intervals.items():
+        for i in v:
+            if not isinstance(i, int):
+                raise TypeError("Тип вложенных данных не соответствует целому числу")
+    if "lesson" not in intervals:
+        raise ValueError("Нет нужного списка lesson")
+    if "pupil" not in intervals:
+        raise ValueError("Нет нужного списка pupil")
+    if "tutor" not in intervals:
+        raise ValueError("Нет нужного списка tutor")
 
     start_lesson = intervals['lesson'][0]
     end_lesson = intervals['lesson'][1]
-
+    
     pupil_intervals = intervals['pupil']
     tutor_intervals = intervals['tutor']
     total_time = 0

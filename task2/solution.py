@@ -8,19 +8,21 @@ import pandas
 BASE_DIR = pathlib.Path(__file__).parent
 
 
-all_urls = ["https://ru.wikipedia.org/wiki/Категория:Животные_по_алфавиту"]
+global_url = ["https://ru.wikipedia.org/wiki/Категория:Животные_по_алфавиту"]
 list_letters = ['А','Б','В','Г','Д','Е','Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У','Ф','Х','Ц','Ч','Ш','Щ','Э','Ю','Я']
 dict_quan = {}
+# Так как после русского алфавита на сайте начинается английский,
+#  чтобы закончить подставляем английскую букву "А" 
+stop_letter = "А" 
 
 new_dict = {'beasts':[]}
 for i in list_letters:
     new_dict['beasts'].append({'letter': i, 'quantity': 0})
 
-count = 0
 
-def main(url, count):
-    count += 1
-    print(count)
+def main(url):
+    if url != "https://ru.wikipedia.org/wiki/Категория:Животные_по_алфавиту":
+        raise ValueError("Указан неверный URL")
     response = requests.get(url=url)
     result = response.text
 
@@ -49,7 +51,8 @@ def main(url, count):
                     titles = []
                     a = j.find('a')
                     if "title" in a.attrs.keys():
-                        if re.search(f"^A", a['title']):
+                        # Заканчиваем работу если начнется стоп-буква
+                        if re.search(f"^{stop_letter}", a['title']):
                             index_count = 0
                             for k,v in dict_quan.items():
                                 new_dict['beasts'][index_count]["letter"] = k
@@ -68,8 +71,9 @@ def main(url, count):
 
     
     print(dict_quan)
-    all_urls.append(all_links[0])
-    return main(all_links[0], count) 
+    global_url.append(all_links[0])
+    ## создаем рекурсию
+    return main(all_links[0]) 
 
 def save_in_file_csv(data: dict):
     filename = f"{BASE_DIR}/beasts.csv"
@@ -86,10 +90,8 @@ def read_csv_pandas():
 
 if __name__ == "__main__":
     
-    url = ["https://ru.wikipedia.org/wiki/Категория:Животные_по_алфавиту"]
+    main(global_url[0])
     
-    main(url[0], count)
-    print(dict_quan)
 
 
    

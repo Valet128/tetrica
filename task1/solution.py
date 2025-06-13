@@ -17,18 +17,10 @@ def strict(func):
     
     return wrap
 
-@strict
-def sum_two(a: int , b: int =56) -> int:
+
+def sum_two(a: int , b: int) -> int:
     return a + b
 
-sum_two.__defaults__
-@strict
-def sum_two_str(a: str, b: str) -> str:
-    return a + b
 
-print(sum_two.__defaults__)
-
-print(sum_two(1, 34))  # >>> 3
-# print(sum_two(1, 2.4))  # >>> TypeError
-# print(sum_two_str(1, "dfdg"))  # >>> 3
-# print(sum_two_str("1", "2.4"))  # >>> TypeError
+print(sum_two(1, False))  # >>> 3
+print(sum_two(1, 2.4))  # >>> TypeError
